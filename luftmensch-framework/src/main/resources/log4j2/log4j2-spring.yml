@@ -1,0 +1,49 @@
+Configuration:
+  status: WARN #打印日志级别OFF>FATAL>ERROR>WARN>INFO>DEBUG>TRACE>ALL
+  Properties: # 定义全局变量
+    Property: # 缺省配置（用于开发环境）。其他环境需要在VM参数中指定，如下：
+      #测试：-Dlog.level.console=warn -Dlog.level.default=trace
+      #生产：-Dlog.level.console=warn -Dlog.level.default=info
+      - name: log.level.console
+        value: info
+      - name: log.level.default
+        value: info
+      - name: log.path
+        value: logs #项目根路径
+      - name: project.name
+        value: log4j2
+
+  Appenders: #输出源，用于定义日志输出的地方，
+    Console:  #把日志输出到控制台
+      name: CONSOLE
+      PatternLayout: #输出日志的格式
+        pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS}:%4p %t (%l) - %m%n"
+    RollingFile: # 输出到文件，超过128MB归档
+      - name: ROLLING_FILE
+        ignoreExceptions: false
+        fileName: ${log.path}/${project.name}.log
+        filePattern: "${log.path}/${date:yyyy-MM}/${project.name}-%d{yyyy-MM-dd}-%i.log.gz" #指定当发生Rolling时，文件的转移和重命名规则
+        PatternLayout:
+          pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS}:%4p %t (%l) - %m%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: "128 MB" #指定当文件体积大于size指定的值时，触发Rolling
+          TimeBasedTriggeringPolicy:
+            interval: "1" # 注意filePattern中配置的文件重命名规则是${FILE_NAME}-%d{yyyy-MM-dd HH-mm}-%i，最小的时间粒度是mm，即分钟，TimeBasedTriggeringPolicy指定的size是1，结合起来就是每1分钟生成一个新文件。如果改成%d{yyyy-MM-dd HH}，最小粒度为小时，则每一个小时生成一个文件。
+
+        DefaultRolloverStrategy:
+          max: 1000 #指定最多保存的文件个数
+
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        - ref: CONSOLE
+        - ref: ROLLING_FILE
+    Logger: # 为com.xjj包配置特殊的Log级别，方便调试
+      - name: org.springframework
+        additivity: false
+        level: trace
+        AppenderRef:
+          - ref: CONSOLE
+          - ref: ROLLING_FILE

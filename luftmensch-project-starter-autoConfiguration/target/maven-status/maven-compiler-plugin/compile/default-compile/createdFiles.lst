@@ -1,0 +1,4 @@
+com\luftmensch\project\bean\TestServiceProperties.class
+com\luftmensch\project\auto\ProjectAutoConfiguration.class
+com\luftmensch\project\service\TestService.class
+META-INF\spring-configuration-metadata.json

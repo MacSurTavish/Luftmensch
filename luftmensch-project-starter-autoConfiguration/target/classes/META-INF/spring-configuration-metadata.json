@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "test.service",
+      "type": "com.luftmensch.project.bean.TestServiceProperties",
+      "sourceType": "com.luftmensch.project.bean.TestServiceProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "test.service.after",
+      "type": "java.lang.String",
+      "sourceType": "com.luftmensch.project.bean.TestServiceProperties"
+    },
+    {
+      "name": "test.service.pre",
+      "type": "java.lang.String",
+      "sourceType": "com.luftmensch.project.bean.TestServiceProperties"
+    }
+  ],
+  "hints": []
+}
